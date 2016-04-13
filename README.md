@@ -1,4 +1,4 @@
-= solml : Machine Learning on roof images
+# solml : Machine Learning on roof images
 
 Python files :
 
