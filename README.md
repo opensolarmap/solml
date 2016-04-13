@@ -1,3 +1,5 @@
+= solml : Machine Learning on roof images
+
 Python files :
 
 * vgg-16_keras.py : example using VGG16 with Keras
@@ -17,6 +19,3 @@ Notebooks :
 * multi : 4 classes, using CNN and LR
 * dict_learning : Dictionary Learning
 
-dummy : modèle débile
-load_buildings : téléchargement des images
-mppca : algo mppca
