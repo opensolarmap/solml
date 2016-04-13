@@ -1,0 +1,11 @@
+__pycache__
+.ipynb_checkpoints
+*.jpg
+gdalwmscache
+*.h5
+MPPCA
+*.pkl
+mapbox.vrt
+*~
+config.ini
+agd_tools
