@@ -37,7 +37,7 @@ for row in csvreader:
 f.close()
 
 def get_available_ident():
-    return buildings.keys()
+    return list(buildings.keys())
 
 def get_bounding_box(ident_list):
     bounding_boxes = {}
