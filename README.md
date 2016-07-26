@@ -20,6 +20,7 @@ Notebooks :
 * dict_learning : Dictionary Learning
 
 Install :
-
-sudo apt-get install libgdal-dev python3-gdal
+````
+sudo apt-get install libgdal-dev python3-gdal libxft-dev
 pip install -r requirements.txt
+````
