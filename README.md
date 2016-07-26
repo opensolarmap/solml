@@ -19,3 +19,7 @@ Notebooks :
 * multi : 4 classes, using CNN and LR
 * dict_learning : Dictionary Learning
 
+Install :
+
+sudo apt-get install libgdal-dev python3-gdal
+pip install -r requirements.txt
