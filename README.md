@@ -24,3 +24,11 @@ Install :
 sudo apt-get install libgdal-dev python3-gdal libxft-dev
 pip install -r requirements.txt
 ````
+
+if pip install GDAL fails, retry after
+
+````
+export CPLUS_INCLUDE_PATH=/usr/include/gdal
+export C_INCLUDE_PATH=/usr/include/gdal
+````
+
