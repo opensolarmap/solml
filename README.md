@@ -7,7 +7,8 @@
 * batch : compute CNN features by batches
 * predict : use the model on CNN features
 
-Install :
+## Install
+
 ````
 sudo apt-get install libgdal-dev python3-gdal libxft-dev
 pip install -r requirements.txt
