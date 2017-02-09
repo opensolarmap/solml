@@ -11,11 +11,9 @@ Python files :
 Notebooks :
 
 * contrib_errors : analysis of contribution errors, mean response time...
-* geo : get geographic information
 * dummy : dummy model
 * mppca : use MPPCA (see https://github.com/michelbl/MPPCA)
 * classif : Logistic Regression (LR) and Support Vector Machines (SVM)
 * CNN : use CNN on the roof images
-* multi : 4 classes, using CNN and LR. This notebook produces a model saves in `models.pkl`.
-* dict_learning : Dictionary Learning
+* multi : 4 classes, using CNN and LR. This notebook produces a model saved in `models.pkl`.
 
