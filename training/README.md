@@ -16,6 +16,6 @@ Notebooks :
 * mppca : use MPPCA (see https://github.com/michelbl/MPPCA)
 * classif : Logistic Regression (LR) and Support Vector Machines (SVM)
 * CNN : use CNN on the roof images
-* multi : 4 classes, using CNN and LR
+* multi : 4 classes, using CNN and LR. This notebook produces a model saves in `models.pkl`.
 * dict_learning : Dictionary Learning
 
