@@ -1,0 +1,10 @@
+[main]
+roof_cache_dir = /path/to/roof/images/
+cnn_cache = /path/to/cnn/features/cache.pkl
+split_sets = /path/to/train/val/test/sets.pkl
+building_info = /path/to/buildings/info.csv
+
+[mapbox]
+token = **************************************************
+cache_dir = /path/to/gdalwmscache
+

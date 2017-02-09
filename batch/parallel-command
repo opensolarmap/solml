@@ -1,0 +1,1 @@
+parallel --arg-sep ,, LD_LIBRARY_PATH=/opt/python3/lib /opt/python3/bin/python3 process_batch.py ,, {0..1409}

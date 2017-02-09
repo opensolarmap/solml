@@ -1,0 +1,5 @@
+[main]
+cnn_cache_dir = /data/projects/opensolarmap/cnn_cache/chunks/
+building_info_dir = /server/var/data/OpenSolarMap/buildings/chunks/
+
+
