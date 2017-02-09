@@ -1,9 +1,0 @@
-[main]
-roof_cache_dir = /path/to/roof/images/
-cnn_cache_dir = /path/to/cnn/features/cache/directory/
-building_info_dir = /path/to/buildings/info/directory/
-
-[mapbox]
-token = **************************************************
-cache_dir = /path/to/gdalwmscache
-

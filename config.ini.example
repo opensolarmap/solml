@@ -1,0 +1,24 @@
+[main]
+cnn_cache_dir = /data/projects/opensolarmap/cnn_cache/chunks/
+building_info_dir = /server/var/data/OpenSolarMap/buildings/chunks/
+
+
+[main]
+roof_cache_dir = /path/to/roof/images/
+cnn_cache = /path/to/cnn/features/cache.pkl
+split_sets = /path/to/train/val/test/sets.pkl
+building_info = /path/to/buildings/info.csv
+
+[mapbox]
+token = **************************************************
+cache_dir = /path/to/gdalwmscache
+
+[main]
+roof_cache_dir = /path/to/roof/images/
+cnn_cache_dir = /path/to/cnn/features/cache/directory/
+building_info_dir = /path/to/buildings/info/directory/
+
+[mapbox]
+token = **************************************************
+cache_dir = /path/to/gdalwmscache
+
