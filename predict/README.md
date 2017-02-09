@@ -1,4 +1,4 @@
-# solml : Machine Learning on roof images
+# predict
 
 Warning : requirement.txt is incomplete
 

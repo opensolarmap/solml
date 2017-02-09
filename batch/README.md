@@ -1,4 +1,4 @@
-# solml : Machine Learning on roof images
+# batch : predict by batch
 
 Python files :
 
