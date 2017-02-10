@@ -1,14 +1,18 @@
-# get information aout the buildings
+# get information (geometry, label) about the labelled buildings
 
 import csv
-from osgeo import ogr
 import json
 import configparser
-import agd_tools.geo
+from os.path import dirname, abspath, join
+
+from osgeo import ogr
+
+from solml import geo
+
 
 config = configparser.ConfigParser()
-config.read('config.ini')
-building_info = config['main']['building_info']
+config.read(join(dirname(abspath(__file__)), '../config.ini'))
+building_info = config['training']['buildings_path']
 f = open(building_info, 'r')
 
 csvreader = csv.reader(f)
@@ -55,8 +59,8 @@ def get_center(ident_list):
 
     def compute_center(bounding_box):
         lon_min, lon_max, lat_max, lat_min = bounding_box
-        x_min, y_max = agd_tools.geo.geo2carto(lat_min, lon_min)
-        x_max, y_min = agd_tools.geo.geo2carto(lat_max, lon_max)
+        x_min, y_max = geo.geo2carto(lat_min, lon_min)
+        x_max, y_min = geo.geo2carto(lat_max, lon_max)
 
         x_center = (x_min+x_max)/2.
         y_center = (y_min+y_max)/2.

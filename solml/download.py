@@ -1,23 +1,23 @@
 # download building images from mapbox
 
-from osgeo import gdal
-from osgeo import osr
-from osgeo import ogr
-import osgeo.gdalconst
 import re
+import configparser
+from os.path import dirname, abspath, join
+
+from osgeo import gdal, osr, ogr, gdalconst
 import numpy as np
 from PIL import Image
-import configparser
 
 import get_info
 
+
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read(join(dirname(abspath(__file__)), 'config.ini'))
 mapbox_token = config['mapbox']['token']
 mapbox_cache_dir = config['mapbox']['cache_dir']
 roof_cache_dir = config['main']['roof_cache_dir']
 
-f = open('mapbox.vrt.template', 'r')
+f = open(join(dirname(abspath(__file__)), 'mapbox.vrt.template'), 'r')
 vrt_template = f.read()
 f.close()
 vrt_template = vrt_template.replace('%token%', mapbox_token)
@@ -30,7 +30,7 @@ f.close()
 gdal.UseExceptions()
 
 # Open virtual dataset
-dataset = gdal.Open('mapbox.vrt', osgeo.gdalconst.GA_ReadOnly)
+dataset = gdal.Open('mapbox.vrt', gdalconst.GA_ReadOnly)
 originX, pixelSizeX, _, originY, _, pixelSizeY = dataset.GetGeoTransform()
 
 
@@ -104,15 +104,12 @@ def fetch_box(left, right, up, down):
     return image
 
 
-def download(ident_list):
-    bounding_boxes = get_info.get_bounding_box(ident_list)
+def download(ident, bounding_box):
+    filename = roof_cache_dir + ident + '.jpg'
 
-    for ident, bounding_box in bounding_boxes.items():
-        filename = roof_cache_dir + ident + '.jpg'
+    np_image = fetch_box(*bounding_box)
 
-        np_image = fetch_box(*bounding_box)
+    pillow_image = Image.fromarray(np_image)
 
-        pillow_image = Image.fromarray(np_image)
-
-        out_file = open(filename, 'wb')
-        pillow_image.save(out_file, 'JPEG')
+    out_file = open(filename, 'wb')
+    pillow_image.save(out_file, 'JPEG')

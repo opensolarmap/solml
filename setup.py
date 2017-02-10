@@ -29,5 +29,13 @@ setup(
         'matplotlib>=2',
         'GDAL>=2',
         'Pillow>=4',
+        'geographiclib',
+        'scikit-learn>=0.18',
+        'scipy>=0.18',
+        'keras>=1.2',
+        'theano>=0.8',
+        'tensorflow>=0.12',
+        'opencv-python>=3.2',
+        'h5py>=2.6',
     ],
 )
