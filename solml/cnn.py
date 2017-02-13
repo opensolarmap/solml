@@ -75,7 +75,7 @@ model.compile(optimizer=sgd, loss='categorical_crossentropy')
 
 
 def load_cnn_features(ident):
-    filename = cnn_cache_dir + 'cnn_{}.png'.format(ident)
+    filename = cnn_cache_dir + 'cnn_{}.pickle'.format(ident)
     if not isfile(filename):
         return None
     with open(filename, 'rb') as f:
@@ -85,7 +85,7 @@ def load_cnn_features(ident):
 
 def save_cnn_features_list(idents, cnn_features_array):
     for i, ident in enumerate(idents):
-        filename = cnn_cache_dir + 'cnn_{}.png'.format(ident)
+        filename = cnn_cache_dir + 'cnn_{}.pickle'.format(ident)
         cnn_feat = cnn_features_array[i, :]
         with open(filename, 'wb') as f:
             pickle.dump(cnn_feat, f)
@@ -128,7 +128,7 @@ def get_cnn_features_list(idents, bounding_boxes):
     N = len(idents)
     X = np.zeros((N, 4608))
     for i, ident in enumerate(idents):
-        if cnn_features_list[i]:
+        if cnn_features_list[i] is not None:
             X[i, :] = cnn_features_list[i]
         else:
             X[i, :] = new_cnn_features_dict[ident]
