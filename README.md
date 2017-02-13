@@ -2,7 +2,6 @@
 
 ## Branches
 
-* master : installation instructions
 * training : train a model
 * batch : compute CNN features by batches
 * predict : use the model on CNN features
