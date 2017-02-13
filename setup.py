@@ -37,5 +37,7 @@ setup(
         'tensorflow>=0.12',
         'opencv-python>=3.2',
         'h5py>=2.6',
+        'psycopg2>=2.6',
+        'psycopg-postgis==0.1',
     ],
 )
