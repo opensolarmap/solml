@@ -99,6 +99,11 @@ def fetch_box(left, right, up, down):
     size_y = y_pix_max - y_pix_min + 1
 
     image = dataset.ReadAsArray(x_pix_min, y_pix_min, size_x, size_y)
+    #image = None
+    #while image is None:
+    #    image = dataset.ReadAsArray(x_pix_min, y_pix_min, size_x, size_y)
+
+
     image = np.rollaxis(image, 0, 3)
 
     return image
