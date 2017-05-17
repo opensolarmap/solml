@@ -1,10 +1,19 @@
 # solml : Machine Learning on roof images
 
-## Directories
+## Directories and modules
 
-* training : train a model
-* batch : compute CNN features by batches
-* predict : use the model on CNN features
+Directories:
+
+* `training`: train a model
+* `batch`: compute CNN features by batches
+* `predict`: use the model on CNN features
+
+Common modules :
+
+* `cnn.py`: use a custom VGG16 CNN
+* `download.py`: download building images from mapbox
+* `geo.py`: geographic and cartographic functions
+* `load.py`: load data, download if not already cached
 
 
 ## Install
@@ -39,7 +48,7 @@ export C_INCLUDE_PATH=/usr/include/gdal
 ````
 
 
-## PostgreSQL
+### PostgreSQL
 
 Install postgresql >= 9.6.
 
@@ -48,8 +57,13 @@ If your favorite package manager does not provide a recent version, follow the i
 Install also `libpq-dev`.
 
 
-## Install the python requirements
+### Install the python requirements
 
 Make an editable installation.
 
 `pip install -e .`
+
+
+### Configuration
+
+Copy `config.ini.example` to `config.ini` and adapt it.

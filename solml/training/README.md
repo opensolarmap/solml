@@ -2,11 +2,10 @@
 
 Python files :
 
-* vgg-16_keras.py : example using VGG16 with Keras
-* get_info.py : get orientation and position of buildings
-* download.py : download roof images from mapbox
-* load.py : load images in memory
-* cnn.py : Convolutional Neural Network appllied on roof images
+* `vgg-16_keras.py`: example using VGG16 with Keras
+* `get_info.py`: get orientation and position of buildings
+* `split.py`: load split sets (ids and labels) for training
+
 
 Notebooks :
 
