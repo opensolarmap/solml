@@ -1,7 +1,6 @@
 [main]
 roof_cache_dir = /server/var/data/OpenSolarMap/roof_cache/
 cnn_cache_dir = /server/var/data/OpenSolarMap/cnn_cache/
-cnn_weights = /server/var/data/OpenSolarMap/vgg16_weights.h5
 models = /server/var/data/OpenSolarMap/models.pickle
 
 [training]

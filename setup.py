@@ -33,7 +33,7 @@ setup(
         'scikit-learn>=0.18',
         'scipy>=0.18',
         'keras>=2.0',
-        'theano>=0.8',
+        'theano>=1.1',
         'tensorflow>=0.12',
         'opencv-python>=3.2',
         'h5py>=2.6',

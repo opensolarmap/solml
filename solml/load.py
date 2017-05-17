@@ -17,11 +17,11 @@ roof_cache_dir = config['main']['roof_cache_dir']
 def load_data(ids, bounding_boxes, width, height, color):
     N = len(ids)
     if color:
-        d = width*height*3
+        n_channel = 3
     else:
-        d = width*height
+        n_channel = 1
 
-    data = np.zeros((N, d))
+    data = np.zeros((N, height, width, n_channel))
     for i, ident in enumerate(ids):
         filename = roof_cache_dir + str(ident) + '.jpg'
         if not isfile(filename):
@@ -31,7 +31,7 @@ def load_data(ids, bounding_boxes, width, height, color):
         image_data = np.asarray(resized_image, dtype=np.uint8)
         assert image_data.shape == (height, width, 3)
         if color:
-            data[i, :] = image_data.ravel()
+            data[i, :, :, :] = image_data
         else:
-            data[i, :] = image_data.mean(axis=2).ravel()
+            data[i, :, :, 0] = image_data.mean(axis=2)
     return data

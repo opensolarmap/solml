@@ -40,12 +40,16 @@ Install PROJ4 :
 apt-get install libproj-dev
 ```
 
+#### Troubleshooting
+
 If pip install GDAL fails, retry after
 
 ````
 export CPLUS_INCLUDE_PATH=/usr/include/gdal
 export C_INCLUDE_PATH=/usr/include/gdal
 ````
+
+If the package `osgeo` cannot be imported from python, retry after installing `libgeos-dev libwebp-dev unixodbc-dev libxerces-c-dev libjasper-dev libnetcdf-dev libhdf4-alt-dev libgif-dev`.
 
 
 ### PostgreSQL
