@@ -61,6 +61,15 @@ If your favorite package manager does not provide a recent version, follow the i
 Install also `libpq-dev`.
 
 
+### Tensorflow
+
+You can install tensorflow from pip and it is the fastest and easiest option.
+
+If you plan to compute the CNN features using a CPU, the packaged version of tensorflow may not take advantage of advanced instruction sets supported by your CPU. In that case tensorflow can be built from source. Tested on CPUs supporting SSE4.1, SSE4.2, AVX, AVX2, FMA (Intel Xeon E5-2643 v3 @ 3.40GHz), the optimized version of tensorflow achieves a 2x speedup compared to the packaged version.
+
+Tensorflow works best on GPUs. Ran on a nVidia GeForce GTX 1060 6Go, a mid to high-end graphic card launched in 2016, tensorflow is 10x faster than on 2 Intel Xeon E5-2643 v3 with the optimiser version. It applies VGG16 on 35.000 images of dimension 96x96 per second. Graphic cards are by far the cheapest and the most efficient option to perform deep learning on large amounts of data.
+
+
 ### Install the python requirements
 
 Make an editable installation.
