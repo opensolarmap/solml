@@ -4,8 +4,8 @@
 
 Directories:
 
-* `training`: train a model
-* `batch`: compute CNN features by batches
+* `train`: train a model
+* `compute`: compute CNN features by batches
 * `predict`: use the model on CNN features
 
 Common modules :
