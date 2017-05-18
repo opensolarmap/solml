@@ -1,12 +1,17 @@
-# training : train a model on examples
+# train : train a model on examples
 
-Python files :
+## Python files
 
 * `get_info.py`: get orientation and position of buildings
 * `split.py`: load split sets (ids and labels) for training
 
+## Data
 
-Notebooks :
+This notebooks must be run with the files `contribs.csv` and `buildings.csv` published here: https://www.data.gouv.fr/fr/datasets/donnees-brutes-de-contribution-anonymisees/
+
+These files must be copied to the location `training/contribs_path` and `training/buildings_path` in `config.ini`. 
+
+## Notebooks
 
 * contrib_errors : analysis of contribution errors, mean response time...
 * dummy : dummy model
