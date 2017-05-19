@@ -11,7 +11,7 @@ import numpy as np
 from PIL import Image
 
 import get_info
-from solml import download, load
+from solml import load
 
 
 config = configparser.ConfigParser()
