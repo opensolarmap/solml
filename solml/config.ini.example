@@ -3,6 +3,12 @@ roof_cache_dir = /server/var/data/OpenSolarMap/roof_cache/
 cnn_cache_dir = /server/var/data/OpenSolarMap/cnn_cache/
 models = /server/var/data/OpenSolarMap/models.pickle
 
+database_host = localhost
+database_port = 1234
+database_name = solar
+database_username = solar
+database_password = ***
+
 [training]
 
 buildings_path = /server/var/data/OpenSolarMap/training/buildings_labelled.csv
