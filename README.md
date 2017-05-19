@@ -54,11 +54,31 @@ If the package `osgeo` cannot be imported from python, retry after installing `l
 
 ### PostgreSQL
 
-Install postgresql >= 9.6.
+Install postgresql >= 9.6 and postgis.
 
 If your favorite package manager does not provide a recent version, follow the instructions in https://www.postgresql.org/download/.
 
 Install also `libpq-dev`.
+
+Create a database. Here are a few tips :
+
+* to perform administrative tasks on the database, log in as the postgres user `su postgres`
+* to create a database user: `createuser --interactive`
+* to create the database `solar`: `createdb solar`
+* to edit the access policies : `nano /etc/postgres/9.6/main/pg_hba.conf` (add a line `local solar solar md5`) then reload `systemctl reload postgresql`
+* in the `psql` command prompt: (use `\c` to connect, `\l` to list databases and `\d` to list tables)
+```
+grant all privileges on database solar to solar;
+alter user solar with password '***';
+\c solar
+create extension postgis;
+```
+* test the connection: `psql solar solar`
+* set up a tunnel if your database is not on the same system than the one which runs your python code:
+```
+ssh -M -S ~/my-ctrl-socket-5432 -fnNT -L 5432:localhost:5432 username@database-machine
+ssh -S ~/my-ctrl-socket-5432 -O exit username@database-machine
+```
 
 
 ### Tensorflow
@@ -80,3 +100,10 @@ Make an editable installation.
 ### Configuration
 
 Copy `config.ini.example` to `config.ini` and adapt it.
+
+
+## Geographic coordinates and cartography
+
+Geographic coordinates are a means to label locations on the earth with numbers. The most used geographic coordinates system nowadays is [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System). It approximated the surface of the earth as a speroid, and defines a 2-dimensional coordinates system on that theoretical spheroid, composed of a latitude (lat, theta) and a longitude (lon, long, lambda). Although difficult, it is possible to compute distances and surfaces using WGS84.
+
+Cartography is the art of representing the surface of the earth on planes, using a "projection". Such a projection cannot be satisfactory as it necessarily violates either angles, distances, surfaces or bearings. Among the huge number of invented projections, the Web Mercator is commonly used. Lambert93 is also commonly used in France. Both Web Mercator and Lambert93 use a 2-dimensional planar system whose axis are called X and Y. Distances and surfaces are fast and easy to compute using Web Mercator or Lambert93 but they are very imprecise.

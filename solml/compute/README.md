@@ -9,6 +9,29 @@ These files share the names but differ from those in dir train.
 
 ## Data
 
+### Source
+
+`buildings_all.csv` is an extract of all the buildings in france whose surface is >= 100m2 (TODO to be confirmed) contains the following columns :
+
+* code of the commune (INSEE)
+* OpenStreetMap id
+* geometry as geojson
+
+The request used is:
+```
+? TODO
+```
+
+TODO : surface is computed with WGS84 or WebMercator ? (important for "Collectivités d'outre-mer")
+
+### Import
+
+* create the table that will be used to store all the data about the buildings `create table buildings (commune char(5), id_osm bigint, geojson text);`
+* import the data `\copy buildings from /server/var/data/OpenSolarMap/buildings_all.csv with (format csv, header);`
+* index by `id_osm` : `create unique index buildings_id_osm on buildings (id_osm);`
+
+
+
 Extract from OpenStreetMap...
 
 ## Notebooks
@@ -17,19 +40,14 @@ Extract from OpenStreetMap...
 
 ## Postgresql
 
-`buildings_all.csv` contains the following columns :
-* code of the commune (INSEE)
-* OpenStreetMap id
-* geometry as geojson
-
 Import to postgresql (with postgis) :
 
 ```
-create table buildings (commune char(5), id_osm bigint, geojson text)
-\copy buildings from buildings_all.csv with (format csv, header);
-create unique index buildings_id_osm on buildings (id_osm);
+
+
 alter table buildings add geom geometry;
 update buildings set geom = st_setsrid(st_geomfromgeojson(geojson),4326);
+
 create index buildings_geom on buildings using gist(geom);
 alter table buildings add merc geometry;
 update buildings set merc = st_transform(geom,3857);
