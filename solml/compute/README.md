@@ -15,7 +15,7 @@ These files share the names but differ from those in dir train.
 
 * code of the commune (INSEE)
 * OpenStreetMap id
-* geometry as geojson
+* geometry as geojson (WGS84)
 
 The request used is:
 ```
@@ -47,8 +47,8 @@ Import to postgresql (with postgis) :
 
 alter table buildings add geom geometry;
 update buildings set geom = st_setsrid(st_geomfromgeojson(geojson),4326);
-
 create index buildings_geom on buildings using gist(geom);
+
 alter table buildings add merc geometry;
 update buildings set merc = st_transform(geom,3857);
 alter table buildings add area real;

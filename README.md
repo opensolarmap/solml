@@ -104,6 +104,11 @@ Copy `config.ini.example` to `config.ini` and adapt it.
 
 ## Geographic coordinates and cartography
 
-Geographic coordinates are a means to label locations on the earth with numbers. The most used geographic coordinates system nowadays is [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System). It approximated the surface of the earth as a speroid, and defines a 2-dimensional coordinates system on that theoretical spheroid, composed of a latitude (lat, theta) and a longitude (lon, long, lambda). Although difficult, it is possible to compute distances and surfaces using WGS84.
+Geographic coordinates are a means to label locations on the earth with numbers. The most used geographic coordinates system nowadays is [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_System). It approximates the surface of the earth as a speroid, and defines a 2-dimensional coordinates system on that theoretical spheroid, composed of a latitude (lat, theta) and a longitude (lon, long, lambda). Although complex, it is possible to compute distances and surfaces using WGS84.
 
-Cartography is the art of representing the surface of the earth on planes, using a "projection". Such a projection cannot be satisfactory as it necessarily violates either angles, distances, surfaces or bearings. Among the huge number of invented projections, the Web Mercator is commonly used. Lambert93 is also commonly used in France. Both Web Mercator and Lambert93 use a 2-dimensional planar system whose axis are called X and Y. Distances and surfaces are fast and easy to compute using Web Mercator or Lambert93 but they are very imprecise.
+Cartography is the art of representing the surface of the earth on planes, using a "projection". Such a projection cannot be satisfactory as it necessarily violates either angles, distances, surfaces or bearings. Among the huge number of invented projections, [Web Mercator(https://en.wikipedia.org/wiki/Web_Mercator)] is commonly used. [Lambert93](https://fr.wikipedia.org/wiki/Projection_conique_conforme_de_Lambert#Projections_officielles_en_France_m.C3.A9tropolitaine) is also commonly used in France. Both Web Mercator and Lambert93 use a 2-dimensional planar system whose axis are called X and Y. Distances and surfaces are fast and easy to compute using Web Mercator or Lambert93 but they are very imprecise.
+
+The Geodetic Parameter Registry assigns a identifier to each of these systems:
+* WGS84 : 4326
+* Web Mercator : 3857
+* Lambert93 : 2154
