@@ -8,8 +8,6 @@ from osgeo import gdal, osr, ogr, gdalconst
 import numpy as np
 from PIL import Image
 
-import get_info
-
 
 config = configparser.ConfigParser()
 config.read(join(dirname(abspath(__file__)), 'config.ini'))
@@ -39,23 +37,39 @@ source = osr.SpatialReference()
 source.ImportFromEPSG(4326)     # WGS84
 target = osr.SpatialReference()
 target.ImportFromEPSG(3857)     # WebMercator
-transform = osr.CoordinateTransformation(source, target)
+transform_WGS84_to_WebMercator = osr.CoordinateTransformation(source, target)
+
+# Create coordinates transformation from WebMercator to WGS84
+source = osr.SpatialReference()
+source.ImportFromEPSG(3857)     # WebMercator
+target = osr.SpatialReference()
+target.ImportFromEPSG(4326)     # WGS84
+transform_WebMercator_to_WGS84 = osr.CoordinateTransformation(source, target)
 
 
-def WGS84toWebMercator(lon, lat):
-    """Convert from WGS84 to WebMercator."""
+def convert(a_source, b_source, transform):
     point = ogr.Geometry(ogr.wkbPoint)
-    point.AddPoint(lon, lat)
+    point.AddPoint(a_source, b_source)
 
     point.Transform(transform)
 
     point_wkt = point.ExportToWkt()
-    x, y = re.match(r'POINT \((-?[0-9]*\.?[0-9]*) (-?[0-9]*\.?[0-9]*) 0\)',
+    a_target, b_target = re.match(r'POINT \((-?[0-9]*\.?[0-9]*) (-?[0-9]*\.?[0-9]*) 0\)',
                     point_wkt).groups()
-    x = float(x)
-    y = float(y)
+    a_target = float(a_target)
+    b_target = float(b_target)
 
-    return x, y
+    return a_target, b_target
+
+
+def WGS84toWebMercator(lon, lat):
+    """Convert from WGS84 to WebMercator."""
+    return convert(lon, lat, transform_WGS84_to_WebMercator)
+
+
+def WebMercatorToWGS84(lon, lat):
+    """Convert from WebMercator to WGS84."""
+    return convert(lon, lat, transform_WebMercator_to_WGS84)
 
 
 def coord2pix(x, y):
@@ -72,13 +86,13 @@ def pix2coord(x, y):
     return coord_x, coord_y
 
 
-def fetch_box(left, right, up, down):
+def fetch_box(west, east, north, south, border):
     """Fetch a box (rectangle) from WGS84 coordinates."""
-    assert (left < right)
-    assert (up > down)
+    assert (west < east)
+    assert (north > south)
 
-    x_webmercator_min, y_webmercator_max = WGS84toWebMercator(left, up)
-    x_webmercator_max, y_webmercator_min = WGS84toWebMercator(right, down)
+    x_webmercator_min, y_webmercator_max = WGS84toWebMercator(west, north)
+    x_webmercator_max, y_webmercator_min = WGS84toWebMercator(east, south)
 
     assert (x_webmercator_min < x_webmercator_max)
     assert (y_webmercator_min < y_webmercator_max)
@@ -90,10 +104,10 @@ def fetch_box(left, right, up, down):
     assert (y_pix_min < y_pix_max)
 
     # add a border
-    x_pix_min -= 10
-    y_pix_min -= 10
-    x_pix_max += 10
-    y_pix_max += 10
+    x_pix_min -= border
+    y_pix_min -= border
+    x_pix_max += border
+    y_pix_max += border
 
     size_x = x_pix_max - x_pix_min + 1
     size_y = y_pix_max - y_pix_min + 1
@@ -109,10 +123,10 @@ def fetch_box(left, right, up, down):
     return image
 
 
-def download(ident, bounding_box):
+def download(ident, bounding_box, border=10):
     filename = roof_cache_dir + ident + '.jpg'
 
-    np_image = fetch_box(*bounding_box)
+    np_image = fetch_box(*bounding_box, border)
 
     pillow_image = Image.fromarray(np_image)
 

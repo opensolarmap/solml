@@ -51,10 +51,13 @@ create index buildings_geom on buildings using gist(geom);
 
 alter table buildings add merc geometry;
 update buildings set merc = st_transform(geom,3857);
+
 alter table buildings add area real;
 update buildings set area = st_area(geom::geography);
+
 alter table buildings add convex_hull geometry;
 update buildings set convex_hull = st_convexhull(geom);
+
 alter table buildings add convex_hull_carto geometry;
 update buildings set convex_hull_carto = st_transform(convex_hull,3857);
 
