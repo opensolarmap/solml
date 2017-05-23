@@ -61,4 +61,11 @@ update buildings set convex_hull = st_convexhull(geom);
 alter table buildings add convex_hull_carto geometry;
 update buildings set convex_hull_carto = st_transform(convex_hull,3857);
 
+create index buildings_commune on buildings (commune);
+
+alter table buildings add original_image bytea;
+alter table buildings add angle_rad real;
+alter table buildings add size_WM_X real;
+alter table buildings add size_WM_Y real;
+
 ```
