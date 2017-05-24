@@ -1,3 +1,5 @@
+# parallel --arg-sep ,, python process_batch.py 100 ,, {0..99}
+
 import sys
 import os.path
 

@@ -68,4 +68,6 @@ alter table buildings add angle_rad real;
 alter table buildings add size_WM_X real;
 alter table buildings add size_WM_Y real;
 
+create index buildings_angle_rad on buildings (angle_rad);
+
 ```
