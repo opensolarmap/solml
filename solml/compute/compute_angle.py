@@ -1,6 +1,7 @@
 import configparser
 import math
 from io import BytesIO
+import os
 
 import psycopg2
 import postgis
@@ -13,7 +14,7 @@ from solml import download
 # Read config
 
 config = configparser.ConfigParser()
-config.read(join(dirname(abspath(__file__)), 'config.ini'))
+config.read(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'config.ini'))
 database_host = config['main']['database_host']
 database_port = config['main']['database_port']
 database_name = config['main']['database_name']
@@ -71,11 +72,14 @@ def compute_angle(convex_hull_carto):
     angle += 2*math.pi
     while angle > math.pi/4.:
         angle -= math.pi/2.
+        tmp = size_normal
+        size_normal = size_tangent
+        size_tangent = tmp
 
-    # angle in rad
+    # angle in rad, between -pi/4 and pi/4
     # rectangle in WebMercator
     # size of the rectangle in WebMercator
-    return angle, rectangle, (size_normal, size_tangent)
+    return angle, rectangle, (size_tangent, size_normal)
 
 
 def fetch_image(convex_hull_carto):
@@ -107,10 +111,11 @@ def process_building(nb_worker, id_worker):
     cursor.execute("""
         select id_osm, convex_hull_carto
         from buildings
-        sortby commune
-        where mod(id_osm, %s)=%s and angle_rad is none
+        where mod(id_osm, %s)=%s and angle_rad is null
+        order by commune
+        limit 1;    
         ;
-        """, nb_worker, id_worker)
+        """, [nb_worker, id_worker])
     data = cursor.fetchall()[0]
     id_osm, convex_hull_carto = data
 
@@ -123,10 +128,13 @@ def process_building(nb_worker, id_worker):
         original_image=%s,
         angle_rad=%s,
         size_WM_X=%s,
-        size_WM_Y=%s,
+        size_WM_Y=%s
         where id_osm=%s
         ;
-        """, original_bytes, angle, size_WebMercator[0], size_WebMercator[1], id_osm)
+        """, [original_bytes, angle, size_WebMercator[0], size_WebMercator[1], id_osm])
 
+    connection.commit()
     cursor.close()
     connection.close()
+
+    return id_osm
