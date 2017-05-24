@@ -11,16 +11,18 @@ from PIL import Image
 
 config = configparser.ConfigParser()
 config.read(join(dirname(abspath(__file__)), 'config.ini'))
-mapbox_token = config['mapbox']['token']
-mapbox_cache_dir = config['mapbox']['cache_dir']
+vrt_url = config['vrt']['url']
+vrt_user_agent = config['vrt']['user_agent']
+vrt_cache_dir = config['vrt']['cache_dir']
 roof_cache_dir = config['main']['roof_cache_dir']
 
-f = open(join(dirname(abspath(__file__)), 'mapbox.vrt.template'), 'r')
+f = open(join(dirname(abspath(__file__)), 'opensolarmap.vrt.template'), 'r')
 vrt_template = f.read()
 f.close()
-vrt_template = vrt_template.replace('%token%', mapbox_token)
-vrt_template = vrt_template.replace('%cache_dir%', mapbox_cache_dir)
-f = open('mapbox.vrt', 'w')
+vrt_template = vrt_template.replace('%url%', vrt_url)
+vrt_template = vrt_template.replace('%user_agent%', vrt_user_agent)
+vrt_template = vrt_template.replace('%cache_dir%', vrt_cache_dir)
+f = open('opensolarmap.vrt', 'w')
 f.write(vrt_template)
 f.close()
 
@@ -28,7 +30,7 @@ f.close()
 gdal.UseExceptions()
 
 # Open virtual dataset
-dataset = gdal.Open('mapbox.vrt', gdalconst.GA_ReadOnly)
+dataset = gdal.Open('opensolarmap.vrt', gdalconst.GA_ReadOnly)
 originX, pixelSizeX, _, originY, _, pixelSizeY = dataset.GetGeoTransform()
 
 

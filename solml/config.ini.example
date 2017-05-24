@@ -15,7 +15,8 @@ buildings_path = /server/var/data/OpenSolarMap/training/buildings_labelled.csv
 contribs_path = /server/var/data/OpenSolarMap/training/contribs.csv
 split_sets = /server/var/data/OpenSolarMap/training/split_sets.pickle
 
-[mapbox]
+[vrt]
 
-token = ***
+url = http://a.tiles.mapbox.com/v4/openstreetmap.map-inh7ifmo/${z}/${x}/${y}.png?access_token=***
+user_agent = GDAL
 cache_dir = /server/var/data/gdalwmscache/
