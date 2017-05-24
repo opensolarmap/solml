@@ -10,7 +10,7 @@ from os.path import dirname, abspath, join
 import numpy as np
 from PIL import Image
 
-import get_info
+from solml.train import get_info
 from solml import load
 
 
