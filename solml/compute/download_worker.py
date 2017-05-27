@@ -1,4 +1,4 @@
-# parallel --arg-sep ,, python process_batch.py 100 ,, {0..99}
+# parallel --jobs 10 --arg-sep ,, python download_worker.py 100 ,, {0..99}
 
 import sys
 import os.path

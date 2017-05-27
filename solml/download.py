@@ -9,6 +9,7 @@ import numpy as np
 from PIL import Image
 
 
+# TODO, BUG : race condition when download.py is imported by parallel jobs
 config = configparser.ConfigParser()
 config.read(join(dirname(abspath(__file__)), 'config.ini'))
 vrt_url = config['vrt']['url']

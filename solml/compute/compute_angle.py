@@ -120,18 +120,28 @@ def process_building(nb_worker, id_worker):
     id_osm, convex_hull_carto = data
 
     # Download and process
-    original_bytes, angle, size_WebMercator = fetch_image(convex_hull_carto)
-
-    # Save the data
-    cursor.execute("""
-        update buildings set
-        original_image=%s,
-        angle_rad=%s,
-        size_WM_X=%s,
-        size_WM_Y=%s
-        where id_osm=%s
-        ;
-        """, [original_bytes, angle, size_WebMercator[0], size_WebMercator[1], id_osm])
+    try:
+        original_bytes, angle, size_WebMercator = fetch_image(convex_hull_carto)
+    except AttributeError as e:
+        # If the download fails, update angle_rad to an impossible value
+        # This column is indexes and errors can be easily querried.
+        cursor.execute("""
+            update buildings set
+            angle_rad=-10
+            where id_osm=%s
+            ;
+            """, [id_osm])
+    else:
+        # Save the data
+        cursor.execute("""
+            update buildings set
+            original_image=%s,
+            angle_rad=%s,
+            size_WM_X=%s,
+            size_WM_Y=%s
+            where id_osm=%s
+            ;
+            """, [original_bytes, angle, size_WebMercator[0], size_WebMercator[1], id_osm])
 
     connection.commit()
     cursor.close()
