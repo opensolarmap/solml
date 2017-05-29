@@ -3,13 +3,14 @@
 import re
 import configparser
 from os.path import dirname, abspath, join
+import string
+import random
 
 from osgeo import gdal, osr, ogr, gdalconst
 import numpy as np
 from PIL import Image
 
 
-# TODO, BUG : race condition when download.py is imported by parallel jobs
 config = configparser.ConfigParser()
 config.read(join(dirname(abspath(__file__)), 'config.ini'))
 vrt_url = config['vrt']['url']
@@ -17,13 +18,18 @@ vrt_user_agent = config['vrt']['user_agent']
 vrt_cache_dir = config['vrt']['cache_dir']
 roof_cache_dir = config['main']['roof_cache_dir']
 
+
 f = open(join(dirname(abspath(__file__)), 'opensolarmap.vrt.template'), 'r')
 vrt_template = f.read()
 f.close()
 vrt_template = vrt_template.replace('%url%', vrt_url)
 vrt_template = vrt_template.replace('%user_agent%', vrt_user_agent)
 vrt_template = vrt_template.replace('%cache_dir%', vrt_cache_dir)
-f = open('opensolarmap.vrt', 'w')
+
+# randomize to avoid race condition when download.py is imported by parallel jobs
+vrt_filename = '/tmp/opensolarmap_{}.vrt'.format(
+    ''.join(random.choice(string.ascii_lowercase) for i in range(10)))
+f = open(vrt_filename, 'w')
 f.write(vrt_template)
 f.close()
 
@@ -31,7 +37,7 @@ f.close()
 gdal.UseExceptions()
 
 # Open virtual dataset
-dataset = gdal.Open('opensolarmap.vrt', gdalconst.GA_ReadOnly)
+dataset = gdal.Open(vrt_filename, gdalconst.GA_ReadOnly)
 originX, pixelSizeX, _, originY, _, pixelSizeY = dataset.GetGeoTransform()
 
 
@@ -129,7 +135,8 @@ def fetch_box(west, east, north, south, border):
 def download(ident, bounding_box, border=10):
     filename = roof_cache_dir + ident + '.jpg'
 
-    np_image = fetch_box(*bounding_box, border)
+    west, east, north, south = bounding_box
+    np_image = fetch_box(west, east, north, south, border)
 
     pillow_image = Image.fromarray(np_image)
 
