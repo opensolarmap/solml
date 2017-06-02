@@ -1,27 +1,11 @@
-import configparser
 import math
 from io import BytesIO
 import os
 
-import psycopg2
-import postgis
 import numpy as np
 from PIL import Image
 
 from solml import download
-
-
-# Read config
-
-config = configparser.ConfigParser()
-config.read(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'config.ini'))
-database_host = config['main']['database_host']
-database_port = config['main']['database_port']
-database_name = config['main']['database_name']
-database_username = config['main']['database_username']
-database_password = config['main']['database_password']
-assert database_host == 'localhost'
-assert database_port == '1234'
 
 
 def compute_angle(convex_hull_carto):
@@ -101,21 +85,16 @@ def fetch_image(convex_hull_carto):
     return original_bytes, angle, size_WebMercator
 
 
-def process_building(nb_worker, id_worker):
-    # Open connection
-    connection = psycopg2.connect(dbname=database_name, user=database_username, password=database_password)
-    cursor = connection.cursor()
-    postgis.register(cursor)
+def process_building(connection, cursor, nb_worker, id_worker):
 
     # Fetch the information on one building
     cursor.execute("""
         select id_osm, convex_hull_carto
         from buildings
         where mod(id_osm, %s)=%s and angle_rad is null
-        order by commune
-        limit 1;    
+        limit 1
         ;
-        """, [nb_worker, id_worker])
+        """, [nb_worker, id_worker])  #         order by commune
     data = cursor.fetchall()[0]
     id_osm, convex_hull_carto = data
 
@@ -144,7 +123,5 @@ def process_building(nb_worker, id_worker):
             """, [original_bytes, angle, size_WebMercator[0], size_WebMercator[1], id_osm])
 
     connection.commit()
-    cursor.close()
-    connection.close()
 
     return id_osm
