@@ -14,7 +14,7 @@ from PIL import Image
 config = configparser.ConfigParser()
 config.read(join(dirname(abspath(__file__)), 'config.ini'))
 vrt_url = config['vrt']['url']
-vrt_user_agent = config['vrt']['user_agent']
+vrt_referer = config['vrt']['referer']
 vrt_cache_dir = config['vrt']['cache_dir']
 roof_cache_dir = config['main']['roof_cache_dir']
 
@@ -23,7 +23,7 @@ f = open(join(dirname(abspath(__file__)), 'opensolarmap.vrt.template'), 'r')
 vrt_template = f.read()
 f.close()
 vrt_template = vrt_template.replace('%url%', vrt_url)
-vrt_template = vrt_template.replace('%user_agent%', vrt_user_agent)
+vrt_template = vrt_template.replace('%referer%', vrt_referer)
 vrt_template = vrt_template.replace('%cache_dir%', vrt_cache_dir)
 
 # randomize to avoid race condition when download.py is imported by parallel jobs

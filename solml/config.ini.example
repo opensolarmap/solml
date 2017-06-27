@@ -18,5 +18,5 @@ split_sets = /server/var/data/OpenSolarMap/training/split_sets.pickle
 [vrt]
 
 url = http://a.tiles.mapbox.com/v4/openstreetmap.map-inh7ifmo/${z}/${x}/${y}.png?access_token=***
-user_agent = GDAL
+referer = referer
 cache_dir = /server/var/data/gdalwmscache/

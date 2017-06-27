@@ -2,7 +2,7 @@
     <Service name="TMS">
         <ServerUrl>%url%</ServerUrl>
     </Service>
-    <UserAgent>%user_agent%</UserAgent>
+    <Referer>%referer%</Referer>
     <DataWindow>
         <UpperLeftX>-20037508.34</UpperLeftX>
         <UpperLeftY>20037508.34</UpperLeftY>
