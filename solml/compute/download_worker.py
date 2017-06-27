@@ -33,7 +33,7 @@ nb_hours = int(sys.argv[1])
 nb_worker = int(sys.argv[2])
 id_worker = int(sys.argv[3])
 
-duration_in_seconds = nb_hours #* 3600
+duration_in_seconds = nb_hours * 3600
 start_time = time.time()
 end_time = start_time + duration_in_seconds
 
@@ -46,7 +46,7 @@ postgis.register(cursor)
 cursor.execute('set enable_seqscan = off;')
 
 while(time.time() < end_time):
-    compute_angle.process_building(connection, cursor, nb_worker, id_worker)
+    compute_angle.process_buildings(connection, cursor, nb_worker, id_worker)
 
 
 cursor.close()

@@ -85,43 +85,43 @@ def fetch_image(convex_hull_carto):
     return original_bytes, angle, size_WebMercator
 
 
-def process_building(connection, cursor, nb_worker, id_worker):
+def process_buildings(connection, cursor, nb_worker, id_worker):
 
     # Fetch the information on one building
     cursor.execute("""
         select id_osm, convex_hull_carto
         from buildings
         where mod(id_osm, %s)=%s and angle_rad is null
-        limit 1
+        limit 100
         ;
         """, [nb_worker, id_worker])  #         order by commune
-    data = cursor.fetchall()[0]
-    id_osm, convex_hull_carto = data
+    data_buildings = cursor.fetchall()
 
-    # Download and process
-    try:
-        original_bytes, angle, size_WebMercator = fetch_image(convex_hull_carto)
-    except AttributeError as e:
-        # If the download fails, update angle_rad to an impossible value
-        # This column is indexes and errors can be easily querried.
-        cursor.execute("""
-            update buildings set
-            angle_rad=-10
-            where id_osm=%s
-            ;
-            """, [id_osm])
-    else:
-        # Save the data
-        cursor.execute("""
-            update buildings set
-            original_image=%s,
-            angle_rad=%s,
-            size_WM_X=%s,
-            size_WM_Y=%s
-            where id_osm=%s
-            ;
-            """, [original_bytes, angle, size_WebMercator[0], size_WebMercator[1], id_osm])
+    for data_building in data_buildings:
+        id_osm, convex_hull_carto = data_building
 
-    connection.commit()
+        # Download and process
+        try:
+            original_bytes, angle, size_WebMercator = fetch_image(convex_hull_carto)
+        except AttributeError as e:
+            # If the download fails, update angle_rad to an impossible value
+            # This column is indexes and errors can be easily querried.
+            cursor.execute("""
+                update buildings set
+                angle_rad=-10
+                where id_osm=%s
+                ;
+                """, [id_osm])
+        else:
+            # Save the data
+            cursor.execute("""
+                update buildings set
+                original_image=%s,
+                angle_rad=%s,
+                size_WM_X=%s,
+                size_WM_Y=%s
+                where id_osm=%s
+                ;
+                """, [original_bytes, angle, size_WebMercator[0], size_WebMercator[1], id_osm])
 
-    return id_osm
+        connection.commit()
