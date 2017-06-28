@@ -75,14 +75,14 @@ def fetch_image(convex_hull_carto):
     west, north = download.WebMercatorToWGS84(west, north)
     east, south = download.WebMercatorToWGS84(east, south)
 
-    original_array = download.fetch_box(west, east, north, south, border=15)
+    original_array, source = download.fetch_box(west, east, north, south, border=15)
     original_image = Image.fromarray(original_array)
     
     buffer = BytesIO()
     original_image.save(buffer, 'JPEG')
     original_bytes = buffer.getvalue()
 
-    return original_bytes, angle, size_WebMercator
+    return original_bytes, source, angle, size_WebMercator
 
 
 def process_buildings(connection, cursor, nb_worker, id_worker):
@@ -102,8 +102,10 @@ def process_buildings(connection, cursor, nb_worker, id_worker):
 
         # Download and process
         try:
-            original_bytes, angle, size_WebMercator = fetch_image(convex_hull_carto)
+            original_bytes, source, angle, size_WebMercator = fetch_image(convex_hull_carto)
         except AttributeError as e:
+            print("{}: {}".format(id_osm, e))
+            
             # If the download fails, update angle_rad to an impossible value
             # This column is indexes and errors can be easily querried.
             cursor.execute("""
@@ -117,11 +119,12 @@ def process_buildings(connection, cursor, nb_worker, id_worker):
             cursor.execute("""
                 update buildings set
                 original_image=%s,
+                source=%s,
                 angle_rad=%s,
                 size_WM_X=%s,
                 size_WM_Y=%s
                 where id_osm=%s
                 ;
-                """, [original_bytes, angle, size_WebMercator[0], size_WebMercator[1], id_osm])
+                """, [original_bytes, source, angle, size_WebMercator[0], size_WebMercator[1], id_osm])
 
         connection.commit()

@@ -13,32 +13,17 @@ from PIL import Image
 
 config = configparser.ConfigParser()
 config.read(join(dirname(abspath(__file__)), 'config.ini'))
-vrt_url = config['vrt']['url']
-vrt_referer = config['vrt']['referer']
-vrt_cache_dir = config['vrt']['cache_dir']
+vrt1 = config['vrt']['vrt1']
+vrt2 = config['vrt']['vrt2']
 roof_cache_dir = config['main']['roof_cache_dir']
-
-
-f = open(join(dirname(abspath(__file__)), 'opensolarmap.vrt.template'), 'r')
-vrt_template = f.read()
-f.close()
-vrt_template = vrt_template.replace('%url%', vrt_url)
-vrt_template = vrt_template.replace('%referer%', vrt_referer)
-vrt_template = vrt_template.replace('%cache_dir%', vrt_cache_dir)
-
-# randomize to avoid race condition when download.py is imported by parallel jobs
-vrt_filename = '/tmp/opensolarmap_{}.vrt'.format(
-    ''.join(random.choice(string.ascii_lowercase) for i in range(10)))
-f = open(vrt_filename, 'w')
-f.write(vrt_template)
-f.close()
 
 
 gdal.UseExceptions()
 
-# Open virtual dataset
-dataset = gdal.Open(vrt_filename, gdalconst.GA_ReadOnly)
-originX, pixelSizeX, _, originY, _, pixelSizeY = dataset.GetGeoTransform()
+# Open virtual datasets
+dataset1 = gdal.Open(join(dirname(abspath(__file__)), vrt1), gdalconst.GA_ReadOnly)
+dataset2 = gdal.Open(join(dirname(abspath(__file__)), vrt2), gdalconst.GA_ReadOnly)
+originX, pixelSizeX, _, originY, _, pixelSizeY = dataset1.GetGeoTransform()
 
 
 # Create coordinates transformation from WGS84 to WebMercator
@@ -121,22 +106,24 @@ def fetch_box(west, east, north, south, border):
     size_x = x_pix_max - x_pix_min + 1
     size_y = y_pix_max - y_pix_min + 1
 
-    image = dataset.ReadAsArray(x_pix_min, y_pix_min, size_x, size_y)
-    #image = None
-    #while image is None:
-    #    image = dataset.ReadAsArray(x_pix_min, y_pix_min, size_x, size_y)
-
+    source = '1'
+    image = dataset1.ReadAsArray(x_pix_min, y_pix_min, size_x, size_y)
+    if image is None:
+        source = '2'
+        image = dataset2.ReadAsArray(x_pix_min, y_pix_min, size_x, size_y)
+    if image is None:
+        source = ''
 
     image = np.rollaxis(image, 0, 3)
 
-    return image
+    return image, source
 
 
 def download(ident, bounding_box, border=10):
     filename = roof_cache_dir + ident + '.jpg'
 
     west, east, north, south = bounding_box
-    np_image = fetch_box(west, east, north, south, border)
+    np_image, source = fetch_box(west, east, north, south, border)
 
     pillow_image = Image.fromarray(np_image)
 

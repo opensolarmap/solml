@@ -1,6 +1,6 @@
 __pycache__
 .ipynb_checkpoints
-opensolarmap.vrt
+*.vrt
 *~
 config.ini
 solml.egg-info
