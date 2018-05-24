@@ -1,5 +1,11 @@
 # solml : Machine Learning on roof images
 
+## Getting started
+
+1. Install (see instructions below)
+2. Run the jupyter notebooks in order (optionally, you can read the blogposts at the same time)
+
+
 ## Directories and modules
 
 Directories:
@@ -100,6 +106,8 @@ Make an editable installation.
 ### Configuration
 
 Copy `config.ini.example` to `config.ini` and adapt it.
+
+You will need a file `buildings_labelled.csv` and a file `contribs.csv` that you can find in the directory `data`.
 
 
 ## Geographic coordinates and cartography
