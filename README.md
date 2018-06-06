@@ -103,6 +103,11 @@ Make an editable installation.
 `pip install -e .`
 
 
+### WMS service
+
+You need access to a WMS server to download iages of roofs. If you are not familiar with WMS, see this issue to get started: https://github.com/opensolarmap/solml/issues/4
+
+
 ### Configuration
 
 Copy `config.ini.example` to `config.ini` and adapt it.
